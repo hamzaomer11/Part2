@@ -125,6 +125,7 @@ export default App
 
 */
 
+/************************************************ Exercise 2.4 **************************************
 const Header = ({ course }) => <h1>{course}</h1>
 
 const Total = ({ parts }) => {
@@ -215,4 +216,6 @@ const App = () => {
   )
 }
 
-export default App 
+export default App
+
+*/
