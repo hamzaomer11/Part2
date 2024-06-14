@@ -220,6 +220,8 @@ export default App
 
 */
 
+/************************************************** Exercise 2.5 **************************************
+
 import Course from "./components/Course"
 
 const App = () => {
@@ -278,3 +280,5 @@ const App = () => {
 }
 
 export default App
+
+*/
