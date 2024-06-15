@@ -314,7 +314,6 @@ const App = () => {
       alert(`${newName} is already added to phonebook`)
       setPersons(persons)
     }
-
   }
 
   const handleNameChange = (event) => {
