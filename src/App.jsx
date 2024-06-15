@@ -284,22 +284,37 @@ export default App
 */
 
 import { useState } from 'react'
+import Person from './components/Person'
 
 const App = () => {
-  const [persons, setPersons] = useState([]) 
+  const [persons, setPersons] = useState([
+    { id: 1, name: 'Arto Hellas' }
+  ]) 
   const [newName, setNewName] = useState('')
+
+  const copyPersons = [...persons];
 
   const addName = (event) => {
     event.preventDefault()
     const nameObject = {
-      content: newName,
-      important: Math.random() < 0.5,
       id: persons.length + 1,
-  }
+      name: newName
+    }
     setPersons(persons.concat(nameObject))
     console.log(persons, 'Checking persons array')
     setNewName('')
     console.log(newName, 'Checking newName variable')
+    
+    const foundName = copyPersons.some(person => newName === person.name);
+    console.log(foundName, 'display object equality check')
+    if(!foundName) {
+      copyPersons.push(newName)
+      console.log(copyPersons)
+    } else {
+      alert(`${newName} is already added to phonebook`)
+      setPersons(persons)
+    }
+
   }
 
   const handleNameChange = (event) => {
@@ -320,9 +335,9 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <div>
-        {persons.map(person =>
-          <p key={person.id}>{person.content}</p>
-        )}
+          {persons.map(person =>
+            <Person key={person.id} name={person.name}/>
+          )}
       </div>
     </div>
   )
