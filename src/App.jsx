@@ -399,6 +399,8 @@ export default App
 
 */
 
+/****************************************** Exercise 2.8 ********************************************** 
+
 import { useState } from 'react'
 import Person from './components/Person'
 
@@ -469,3 +471,5 @@ const App = () => {
 }
 
 export default App
+
+*/
