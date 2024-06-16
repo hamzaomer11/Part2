@@ -398,3 +398,74 @@ const App = () => {
 export default App
 
 */
+
+import { useState } from 'react'
+import Person from './components/Person'
+
+const App = () => {
+  const [persons, setPersons] = useState([
+    { id: 1, name: 'Arto Hellas', phone: '07792748285' }
+  ]) 
+  const [newName, setNewName] = useState('')
+  const [newPhone, setNewPhone] = useState('')
+
+  const copyPersons = [...persons];
+
+  const addName = (event) => {
+    event.preventDefault()
+    const nameObject = {
+      id: persons.length + 1,
+      name: newName,
+      phone: newPhone
+    }
+    setPersons(persons.concat(nameObject))
+    console.log(persons, 'Checking persons array')
+    setNewName('')
+    console.log(newName, 'Checking newName variable')
+    
+    const foundName = copyPersons.some(person => newName === person.name);
+    console.log(foundName, 'display object equality check')
+    if(!foundName) {
+      copyPersons.push(newName)
+      console.log(copyPersons)
+    } else {
+      alert(`${newName} is already added to phonebook`)
+      setPersons(persons)
+    }
+  }
+
+  const handleNameChange = (event) => {
+    console.log(event.target.value)
+    setNewName(event.target.value)
+  }
+
+  const handlePhoneChange = (event) => {
+    console.log(event.target.value)
+    setNewPhone(event.target.value)
+  }
+
+  return (
+    <div>
+      <h2>Phonebook</h2>
+      <form onSubmit={addName}>
+        <div>
+          name: <input value={newName} onChange={handleNameChange}/>
+        </div>
+        <div>
+          number: <input value={newPhone} onChange={handlePhoneChange}/>
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
+      <h2>Numbers</h2>
+      <div>
+          {persons.map(person =>
+            <Person key={person.id} name={person.name} phone={person.phone}/>
+          )}
+      </div>
+    </div>
+  )
+}
+
+export default App
