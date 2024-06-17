@@ -569,9 +569,11 @@ export default App
 
 */
 
+/*************************************** Exercises 2.10 *********************************************
+
 import { useState } from 'react'
 import Person from './components/Person'
-/* import PersonForm from './components/PersonForm' */
+import PersonForm from './components/PersonForm'
 
 const PersonForm = ({addName, newName, newPhone, handleNameChange, handlePhoneChange}) => {
   return (
@@ -672,3 +674,5 @@ const App = () => {
 }
 
 export default App
+
+*/
