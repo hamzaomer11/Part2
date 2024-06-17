@@ -589,7 +589,15 @@ const PersonForm = ({addName, newName, newPhone, handleNameChange, handlePhoneCh
   )
 }
 
-
+const Filter = ({handleFilterChange}) => {
+  return (
+      <form>
+            <div>
+              filter shown with: <input onChange={handleFilterChange}/>
+            </div>
+      </form>
+  )
+}
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -650,11 +658,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <form>
-        <div>
-          filter shown with: <input onChange={handleFilterChange}/>
-        </div>
-      </form>
+      <Filter handleFilterChange={handleFilterChange}/>
       <h2>add a new</h2>
       <PersonForm addName={addName} newName={newName} newPhone={newPhone} handleNameChange={handleNameChange} handlePhoneChange={handlePhoneChange}/>
       <h2>Numbers</h2>
