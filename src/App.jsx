@@ -568,3 +568,103 @@ const App = () => {
 export default App
 
 */
+
+import { useState } from 'react'
+import Person from './components/Person'
+/* import PersonForm from './components/PersonForm' */
+
+const PersonForm = ({addName, newName, newPhone, handleNameChange, handlePhoneChange}) => {
+  return (
+  <form onSubmit={addName}>
+      <div>
+        name: <input value={newName} onChange={handleNameChange}/>
+      </div>
+      <div>
+        number: <input value={newPhone} onChange={handlePhoneChange}/>
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+  </form>
+  )
+}
+
+
+
+const App = () => {
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+  ])
+
+  const [newName, setNewName] = useState('')
+  const [newPhone, setNewPhone] = useState('')
+  const [newFilterName, setNewFilter] = useState('')
+
+  const copyPersons = [...persons];
+
+  const addName = (event) => {
+    event.preventDefault()
+    const nameObject = {
+      name: newName,
+      number: newPhone,
+      id: persons.length + 1
+    }
+    setPersons(persons.concat(nameObject))
+    console.log(persons, 'Checking persons array')
+    setNewName('')
+    console.log(newName, 'Checking newName variable')
+
+    const foundName = copyPersons.some(person => newName === person.name);
+    console.log(foundName, 'display object equality check')
+    if(!foundName) {
+      copyPersons.push(newName)
+      console.log(copyPersons)
+    } else {
+      alert(`${newName} is already added to phonebook`)
+      setPersons(persons)
+    }
+    console.log(copyPersons)
+  }
+
+  const handleNameChange = (event) => {
+    console.log(event.target.value)
+    setNewName(event.target.value)
+  }
+
+  const handlePhoneChange = (event) => {
+    console.log(event.target.value)
+    setNewPhone(event.target.value)
+  }
+
+  const handleFilterChange = (event) => {
+    console.log(event.target.value)
+    setNewFilter(event.target.value)
+  }
+
+  const namesToShow = persons.filter(person => person.name.toLowerCase().includes(newFilterName.toLowerCase())) 
+  console.group(namesToShow, 'Filtered List Object')
+  
+  return (
+    <div>
+      <h2>Phonebook</h2>
+      <form>
+        <div>
+          filter shown with: <input onChange={handleFilterChange}/>
+        </div>
+      </form>
+      <h2>add a new</h2>
+      <PersonForm addName={addName} newName={newName} newPhone={newPhone} handleNameChange={handleNameChange} handlePhoneChange={handlePhoneChange}/>
+      <h2>Numbers</h2>
+      <div>
+          {namesToShow.map(person =>
+            <Person name={person.name} number={person.number} key={person.id}/>
+          )}
+      </div>
+    </div>
+  )
+}
+
+export default App
