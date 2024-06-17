@@ -569,11 +569,10 @@ export default App
 
 */
 
-/*************************************** Exercises 2.10 *********************************************
+/**************************************** Exercise 2.10 ******************************************* 
 
 import { useState } from 'react'
 import Person from './components/Person'
-import PersonForm from './components/PersonForm'
 
 const PersonForm = ({addName, newName, newPhone, handleNameChange, handlePhoneChange}) => {
   return (
@@ -625,6 +624,7 @@ const App = () => {
     setPersons(persons.concat(nameObject))
     console.log(persons, 'Checking persons array')
     setNewName('')
+    setNewPhone('')
     console.log(newName, 'Checking newName variable')
 
     const foundName = copyPersons.some(person => newName === person.name);
