@@ -792,6 +792,8 @@ export default App
 
 */
 
+/***************************************** Exercise 2.12 *********************************************
+
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Person from './components/Person'
@@ -908,3 +910,6 @@ const App = () => {
 }
 
 export default App
+
+*/
+
