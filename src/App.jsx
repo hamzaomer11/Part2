@@ -1073,8 +1073,6 @@ const App = () => {
 
   const copyPersons = [...persons];
 
-  const baseUrl = 'http://localhost:3001/persons'
-
   useEffect(() => {
     console.log('effect')
     personService
@@ -1091,7 +1089,7 @@ const App = () => {
     const nameObject = {
       name: newName,
       number: newPhone,
-      id: persons.length + 1
+      id: (persons.length + 1).toString(),
     }
 
     personService
@@ -1118,13 +1116,19 @@ const App = () => {
   }
 
   const deleteName = id => {
-    personService
-    .deleteObject(id)
-    .then(response => {
-      if(window.confirm(`Delete '${baseUrl}/${id}' ?`) === true) {
-        setPersons(response.data)
-      }
+    const findPerson = persons.filter(person => person.id === id)[0].name;
+    if(confirm(`Delete ${findPerson}?`) === true) {
+      personService
+      .deleteObject(id)
+      .then(response => {
+        setPersons(persons.filter(person => person.id !== id));
+        console.log(persons, 'What is going on here??')
+        console.log(response.data, 'This is response data')
     })
+      .catch(error => {
+        console.log('Error deleting message: ', error.message)
+    })
+    } 
   }
 
   const handleNameChange = (event) => {
