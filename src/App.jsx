@@ -1170,3 +1170,161 @@ const App = () => {
 export default App
 
 */
+
+import { useState, useEffect } from 'react'
+import personService from './services/persons'
+import Person from './components/Person'
+
+const PersonForm = ({addName, newName, newPhone, handleNameChange, handlePhoneChange}) => {
+  return (
+  <form onSubmit={addName}>
+      <div>
+        name: <input value={newName} onChange={handleNameChange}/>
+      </div>
+      <div>
+        number: <input value={newPhone} onChange={handlePhoneChange}/>
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+  </form>
+  )
+}
+
+const Filter = ({handleFilterChange}) => {
+  return (
+      <form>
+            <div>
+              filter shown with: <input onChange={handleFilterChange}/>
+            </div>
+      </form>
+  )
+}
+
+const App = () => {
+  const [persons, setPersons] = useState([])
+
+  const [newName, setNewName] = useState('')
+  const [newPhone, setNewPhone] = useState('')
+  const [newFilterName, setNewFilter] = useState('')
+
+  const copyPersons = [...persons];
+
+  useEffect(() => {
+    console.log('effect')
+    personService
+      .getAll()
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+  }, [])
+  console.log('render', persons.length, 'persons')
+
+  const addName = (event) => {
+    event.preventDefault()
+
+    const namePresent = persons.find(person => newName.toLowerCase() === person.name.toLowerCase());
+
+    const nameObject = {
+      name: newName,
+      number: newPhone,
+      id: (persons.length + 1).toString(),
+    }
+
+    if(namePresent) {
+      const confirmed = window.confirm(`${namePresent.name} is already added to phonebook`)
+
+      if(!confirmed) {
+        return;
+      }
+
+      personService
+      .update(namePresent.id, nameObject)
+      .then((updatedPersons => {
+        setPersons((prevPerson => {
+          prevPerson.id === namePresent.id ? updatedPersons : persons
+        }));
+        setNewFilter((prevFilteredPerson => {
+          prevFilteredPerson.id === namePresent.id ? updatedPersons : persons
+        }));
+        location.reload();
+      }))
+    } else {
+
+      personService
+      .create(nameObject)
+      .then(response => {
+      setPersons(persons.concat(nameObject))
+      console.log(persons, 'Checking persons array')
+      console.log(newName, 'Checking newName variable')
+      console.log(response)
+    });
+
+    }
+    setNewName('')
+    setNewPhone('')
+
+    const foundName = copyPersons.some(person => newName.toLowerCase() === person.name.toLowerCase());
+    console.log(foundName, 'display object equality check')
+    if(!foundName) {
+      copyPersons.push(newName)
+      console.log(copyPersons)
+    } else {
+      /* alert(`${newName} is already added to phonebook`)
+      setPersons(persons) */
+    }
+    console.log(copyPersons)
+  }
+
+  const deleteName = id => {
+    const findPerson = persons.filter(person => person.id === id)[0].name;
+    if(confirm(`Delete ${findPerson}?`) === true) {
+      personService
+      .deleteObject(id)
+      .then(response => {
+        setPersons(persons.filter(person => person.id !== id));
+        console.log(persons, 'What is going on here??')
+        console.log(response.data, 'This is response data')
+    })
+      .catch(error => {
+        console.log('Error deleting message: ', error.message)
+    })
+    } 
+  }
+
+  const handleNameChange = (event) => {
+    console.log(event.target.value)
+    setNewName(event.target.value)
+  }
+
+  const handlePhoneChange = (event) => {
+    console.log(event.target.value)
+    setNewPhone(event.target.value)
+  }
+
+  const handleFilterChange = (event) => {
+    console.log(event.target.value)
+    setNewFilter(event.target.value)
+  }
+
+  const namesToShow = persons.filter(person => person.name.toLowerCase().includes(newFilterName.toLowerCase())) 
+  console.log(namesToShow, 'Filtered List Object')
+  
+  return (
+    <div>
+      <h2>Phonebook</h2>
+      <Filter handleFilterChange={handleFilterChange}/>
+      <h2>add a new</h2>
+      <PersonForm addName={addName} newName={newName} newPhone={newPhone} handleNameChange={handleNameChange} handlePhoneChange={handlePhoneChange}/>
+      <h2>Numbers</h2>
+      <div>
+          {namesToShow.map(person =>
+            <Person name={person.name} number={person.number} key={person.id} deleteName={() => deleteName(person.id)}/>
+          )}
+      </div>
+    </div>
+  )
+}
+
+export default App
