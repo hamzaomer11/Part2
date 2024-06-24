@@ -1273,8 +1273,8 @@ const App = () => {
       copyPersons.push(newName)
       console.log(copyPersons)
     } else {
-      /* alert(`${newName} is already added to phonebook`)
-      setPersons(persons) */
+      alert(`${newName} is already added to phonebook`)
+      setPersons(persons) 
     }
     console.log(copyPersons)
   }
