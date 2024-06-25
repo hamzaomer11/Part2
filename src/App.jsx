@@ -1171,6 +1171,7 @@ export default App
 
 */
 
+/*************************************** Exercise 2.15 **********************************************
 
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
@@ -1243,12 +1244,12 @@ const App = () => {
       personService
       .update(namePresent.id, nameObject)
       .then((updatedPersons => {
-        setPersons((persons.map((prevPerson) => 
+        setPersons((prevPerson => {
           prevPerson.id === namePresent.id ? updatedPersons : persons
-        )));
-        setNewFilter((persons.map((prevFilteredPerson) => 
+        }));
+        setNewFilter((prevFilteredPerson => {
           prevFilteredPerson.id === namePresent.id ? updatedPersons : persons
-        )));
+        }));
         location.reload();
       }))
     } else {
@@ -1272,6 +1273,7 @@ const App = () => {
       copyPersons.push(newName)
       console.log(copyPersons)
     } else {
+      alert(`${newName} is already added to phonebook`)
       setPersons(persons) 
     }
     console.log(copyPersons)
@@ -1329,3 +1331,4 @@ const App = () => {
 
 export default App
 
+*/
