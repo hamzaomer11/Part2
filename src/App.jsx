@@ -1333,6 +1333,8 @@ export default App
 
 */
 
+/************************************ Exercise 2.17 ****************************************************
+
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 import Person from './components/Person'
@@ -1520,3 +1522,5 @@ const App = () => {
 }
 
 export default App
+
+*/
