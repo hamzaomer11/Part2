@@ -1333,7 +1333,7 @@ export default App
 
 */
 
-/************************************ Exercise 2.16/2.17 ******************************************************
+/************************************ Exercise 2.16/2.17 ********************************************
 
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
@@ -1517,6 +1517,54 @@ const App = () => {
             <Person name={person.name} number={person.number} key={person.id} deleteName={() => deleteName(person.id)}/>
           )}
       </div>
+    </div>
+  )
+}
+
+export default App
+
+*/
+
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+
+const App = () => {
+  const [value, setValue] = useState('')
+  const [rates, setRates] = useState({})
+  const [currency, setCurrency] = useState(null)
+
+  useEffect(() => {
+    console.log('effect run, currency is now', currency)
+
+    // skip if currency is not defined
+    if (currency) {
+      console.log('fetching exchange rates...')
+      axios
+        .get(`https://open.er-api.com/v6/latest/${currency}`)
+        .then(response => {
+          setRates(response.data.rates)
+        })
+    }
+  }, [currency])
+
+  const handleChange = (event) => {
+    setValue(event.target.value)
+  }
+
+  const onSearch = (event) => {
+    event.preventDefault()
+    setCurrency(value)
+  }
+
+  return (
+    <div>
+      <form onSubmit={onSearch}>
+        currency: <input value={value} onChange={handleChange} />
+        <button type="submit">exchange rate</button>
+      </form>
+      <pre>
+        {JSON.stringify(rates, null, 2)}
+      </pre>
     </div>
   )
 }
