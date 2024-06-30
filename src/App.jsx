@@ -1541,8 +1541,8 @@ const App = () => {
       axios
         .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
         .then(response => {
-          const allCountries = response.data
-          setDetail(allCountries)
+          console.log(response.data, 'What is happening')
+          setDetail(response.data)
         })
         .catch(error => {
           console.log(error.message)
