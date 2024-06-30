@@ -1529,41 +1529,38 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const App = () => {
-  const [value, setValue] = useState('')
-  const [rates, setRates] = useState({})
-  const [currency, setCurrency] = useState(null)
+  const [detail, setDetail] = useState({})
+  const [country, setCountry] = useState(null)
 
   useEffect(() => {
-    console.log('effect run, currency is now', currency)
+    console.log('effect run, country is now', country)
 
-    // skip if currency is not defined
-    if (currency) {
-      console.log('fetching exchange rates...')
+    // skip if country is not defined
+    if (country) {
+      console.log('fetching country...')
       axios
-        .get(`https://open.er-api.com/v6/latest/${currency}`)
+        .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${country}`)
         .then(response => {
-          setRates(response.data.rates)
+          setDetail(response.data.name.common)
+        })
+        .catch(error => {
+          console.log(error.message)
         })
     }
-  }, [currency])
-
-  const handleChange = (event) => {
-    setValue(event.target.value)
-  }
+  }, [country])
 
   const onSearch = (event) => {
     event.preventDefault()
-    setCurrency(value)
+    setCountry(event.target.value)
   }
 
   return (
     <div>
-      <form onSubmit={onSearch}>
-        currency: <input value={value} onChange={handleChange} />
-        <button type="submit">exchange rate</button>
+      <form>
+        country: <input onChange={onSearch} />
       </form>
       <pre>
-        {JSON.stringify(rates, null, 2)}
+        {JSON.stringify(detail, null, 2)}
       </pre>
     </div>
   )
