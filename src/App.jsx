@@ -1539,9 +1539,10 @@ const App = () => {
     if (country) {
       console.log('fetching country...')
       axios
-        .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${country}`)
+        .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
         .then(response => {
-          setDetail(response.data.name.common)
+          const allCountries = response.data
+          setDetail(allCountries)
         })
         .catch(error => {
           console.log(error.message)
@@ -1549,16 +1550,13 @@ const App = () => {
     }
   }, [country])
 
-  const onSearch = (event) => {
-    event.preventDefault()
+  const handleChange = (event) => {
     setCountry(event.target.value)
   }
 
   return (
     <div>
-      <form>
-        country: <input onChange={onSearch} />
-      </form>
+        find countries: <input onChange={handleChange} />
       <pre>
         {JSON.stringify(detail, null, 2)}
       </pre>
