@@ -1525,43 +1525,58 @@ export default App
 
 */
 
-import { useState, useEffect } from 'react'
+import {useState, useEffect} from 'react'
 import axios from 'axios'
+import Country from './components/Country'
 
-const App = () => {
-  const [detail, setDetail] = useState({})
-  const [country, setCountry] = useState(null)
-
-  useEffect(() => {
-    console.log('effect run, country is now', country)
-
-    // skip if country is not defined
-    if (country) {
-      console.log('fetching country...')
-      axios
-        .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
-        .then(response => {
-          console.log(response.data, 'What is happening')
-          setDetail(response.data)
-        })
-        .catch(error => {
-          console.log(error.message)
-        })
-    }
-  }, [country])
-
-  const handleChange = (event) => {
-    setCountry(event.target.value)
-  }
-
+const Filter = ({handleFilterChange}) => {
   return (
-    <div>
-        find countries: <input onChange={handleChange} />
-      <pre>
-        {JSON.stringify(detail, null, 2)}
-      </pre>
-    </div>
+      <form>
+            <div>
+              find countries: <input onChange={handleFilterChange}/>
+            </div>
+      </form>
   )
 }
 
+const App = () => {
+
+  const [countries, setCountries] = useState([]);
+  const [filterCountry, setFilterCountry] = useState('')
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
+      .then(response => {
+        console.log('promise fulfilled')
+        setCountries(response.data)
+        console.log(response.data, 'What to do here')
+      })
+  }, [])
+  console.log('render', countries.length, 'countries')
+
+  const handleFilterChange = (event) => {
+    console.log(event.target.value)
+    setFilterCountry(event.target.value)
+  }
+
+  const countriesToShow = countries.filter(country => country.name.common.toLowerCase().includes(filterCountry.toLowerCase())) 
+  console.log(countriesToShow, 'Does it Filter')
+
+  return (
+    <div>
+      <Filter handleFilterChange={handleFilterChange}/>
+      <h2>Show Countries</h2>
+      <div>
+      {countriesToShow.map(country => 
+        <Country name={country.name.common} key={country.id}/>
+      )}
+      </div>
+    </div>
+  )
+
+}
+
 export default App
+
