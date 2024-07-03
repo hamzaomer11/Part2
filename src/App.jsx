@@ -1568,11 +1568,11 @@ const App = () => {
     <div>
       <Filter handleFilterChange={handleFilterChange}/>
       <h2>Show Countries</h2>
-      <div>
-      {countriesToShow.map(country => 
-        <Country name={country.name.common} key={country.id}/>
+      <ul>
+        {countriesToShow.map((country, i) => 
+        <Country name={country.name.common} key={i}/>
       )}
-      </div>
+      </ul>
     </div>
   )
 
