@@ -1567,12 +1567,21 @@ const App = () => {
   return (
     <div>
       <Filter handleFilterChange={handleFilterChange}/>
-      <h2>Show Countries</h2>
-      <ul>
-        {countriesToShow.map((country) => 
+      <div>
+        {countriesToShow.length > 10 && (
+          <p>Too many matches, specify another filter</p>
+        )}
+
+        {countriesToShow.length <= 10 && countriesToShow.length > 1 && (
+          <div>
+            <ul>
+            {countriesToShow.map((country) => 
         <Country name={country.name.common} key={country.flag}/>
-      )}
-      </ul>
+        )}
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   )
 

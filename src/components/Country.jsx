@@ -1,9 +1,9 @@
 const Country = ({name}) => {
 
     return (
-        <div>
+        <li>
             {name} 
-        </div>
+        </li>
     )
 }
 
