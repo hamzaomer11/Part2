@@ -1564,6 +1564,16 @@ const App = () => {
   const countriesToShow = countries.filter(country => country.name.common.toLowerCase().includes(filterCountry.toLowerCase())) 
   console.log(countriesToShow, 'Does it Filter')
 
+  const showLanguages = (languages) => {
+    if(Array.isArray(languages)) {
+      return languages.join(', ');
+    } else if(typeof languages === 'object') {
+      return Object.values(languages).join(', ');
+    } else {
+      return 'Unknown'
+    }
+  }
+
   return (
     <div>
       <Filter handleFilterChange={handleFilterChange}/>
@@ -1581,6 +1591,16 @@ const App = () => {
             </ul>
           </div>
         )}
+
+        {countriesToShow.length === 1 && (
+          countriesToShow.map((country) => 
+            <Country name={country.name.common} 
+            capital={country.capital} 
+            area={country.area}
+            languages={country.languages && showLanguages(country.languages)}
+            flag={country.flags.png}
+            key={country.flag}/>
+        ))}
       </div>
     </div>
   )
