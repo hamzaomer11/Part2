@@ -1527,7 +1527,6 @@ export default App
 
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import Country from './components/Country'
 
 const Filter = ({handleFilterChange}) => {
   return (
@@ -1543,6 +1542,7 @@ const App = () => {
 
   const [countries, setCountries] = useState([]);
   const [filterCountry, setFilterCountry] = useState('')
+  const [selectedCountry, setSelectedCountry] = useState(null)
 
   useEffect(() => {
     console.log('effect')
@@ -1574,6 +1574,10 @@ const App = () => {
     }
   }
 
+  const handleCountryData = (country) => {
+    setSelectedCountry(country)
+  }
+
   return (
     <div>
       <Filter handleFilterChange={handleFilterChange}/>
@@ -1584,23 +1588,26 @@ const App = () => {
 
         {countriesToShow.length <= 10 && countriesToShow.length > 1 && (
           <div>
-            <ul>
             {countriesToShow.map((country) => 
-        <Country name={country.name.common} key={country.flag}/>
-        )}
-            </ul>
+            <div key={country.name.common}>
+              {country.name.common}
+              <button onClick={() => handleCountryData(country)}>Show</button>
+            </div>
+            )}
           </div>
         )}
 
-        {countriesToShow.length === 1 && (
-          countriesToShow.map((country) => 
-            <Country name={country.name.common} 
-            capital={country.capital} 
-            area={country.area}
-            languages={country.languages && showLanguages(country.languages)}
-            flag={country.flags.png}
-            key={country.flag}/>
-        ))}
+        {selectedCountry && ( 
+            <div>
+              <p>{selectedCountry.name.common}</p>
+              <p>Capital: {selectedCountry.capital}</p>
+              <p>Area: {selectedCountry.area}</p>
+              <p>Language(s): 
+                {selectedCountry.languages && showLanguages(selectedCountry.languages)}
+              </p>
+              <img src={selectedCountry.flags.png} alt={selectedCountry.name.common} />
+            </div>
+        )}
       </div>
     </div>
   )
