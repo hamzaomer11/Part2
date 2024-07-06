@@ -1525,7 +1525,7 @@ export default App
 
 */
 
-/*************************************** Exercise 2.18/2.19 *******************************************
+
 
 import {useState, useEffect} from 'react'
 import axios from 'axios'
@@ -1618,6 +1618,7 @@ const App = () => {
               <p>Language(s): 
                 {selectedCountry.languages && showLanguages(selectedCountry.languages)}
               </p>
+              <h3>Flag: </h3>
               <img src={selectedCountry.flags.png} alt={selectedCountry.name.common} />
             </div>
         )}
@@ -1629,4 +1630,3 @@ const App = () => {
 
 export default App
 
-*/
