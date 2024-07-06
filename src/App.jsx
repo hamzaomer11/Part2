@@ -1525,6 +1525,7 @@ export default App
 
 */
 
+/*************************************** Exercise 2.18/2.19 *******************************************
 
 import {useState, useEffect} from 'react'
 import axios from 'axios'
@@ -1628,3 +1629,4 @@ const App = () => {
 
 export default App
 
+*/
