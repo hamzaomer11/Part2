@@ -1527,6 +1527,7 @@ export default App
 
 import {useState, useEffect} from 'react'
 import axios from 'axios'
+import Country from './components/Country'
 
 const Filter = ({handleFilterChange}) => {
   return (
@@ -1596,6 +1597,16 @@ const App = () => {
             )}
           </div>
         )}
+
+        {countriesToShow.length === 1 && (
+          countriesToShow.map((country) => 
+            <Country name={country.name.common} 
+            capital={country.capital} 
+            area={country.area}
+            languages={country.languages && showLanguages(country.languages)}
+            flag={country.flags.png}
+            key={country.flag}/>
+        ))}
 
         {selectedCountry && ( 
             <div>
