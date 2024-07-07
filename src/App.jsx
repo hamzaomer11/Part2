@@ -1631,3 +1631,122 @@ const App = () => {
 export default App
 
 */
+
+import {useState, useEffect} from 'react'
+import axios from 'axios'
+import Country from './components/Country'
+import weatherService from './services/weather'
+
+const Filter = ({handleFilterChange}) => {
+  return (
+      <form>
+            <div>
+              find countries: <input onChange={handleFilterChange}/>
+            </div>
+      </form>
+  )
+}
+
+const App = () => {
+
+  const [countries, setCountries] = useState([]);
+  const [filterCountry, setFilterCountry] = useState('')
+  const [selectedCountry, setSelectedCountry] = useState(null)
+  const [getWeather, setWeather] = useState([])
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
+      .then(response => {
+        console.log('promise fulfilled')
+        setCountries(response.data)
+        console.log(response.data, 'What to do here')
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
+  }, [])
+  console.log('render', countries.length, 'countries')
+
+  const handleFilterChange = (event) => {
+    console.log(event.target.value)
+    setFilterCountry(event.target.value)
+  }
+
+  const countriesToShow = countries.filter(country => country.name.common.toLowerCase().includes(filterCountry.toLowerCase())) 
+  console.log(countriesToShow, 'Does it Filter')
+
+  const showLanguages = (languages) => {
+    if(Array.isArray(languages)) {
+      return languages.join(', ');
+    } else if(typeof languages === 'object') {
+      return Object.values(languages).join(', ');
+    } else {
+      return 'Unknown'
+    }
+  }
+
+  const handleCountryData = (country) => {
+    setSelectedCountry(country)
+  }
+
+  const getTemp = (latitude, longitude) => {
+    weatherService
+    .getWeatherInfo(latitude, longitude)
+    .then(response => {
+    console.log(response, 'new weather data from hamza')
+    return response
+  })
+  }
+
+  return (
+    <div>
+      <Filter handleFilterChange={handleFilterChange}/>
+      <div>
+        {countriesToShow.length > 10 && (
+          <p>Too many matches, specify another filter</p>
+        )}
+
+        {countriesToShow.length <= 10 && countriesToShow.length > 1 && (
+          <div>
+            {countriesToShow.map((country) => 
+            <div key={country.name.common}>
+              {country.name.common}
+              <button onClick={() => handleCountryData(country)}>Show</button>
+            </div>
+            )}
+          </div>
+        )}
+
+        {countriesToShow.length === 1 && (
+          countriesToShow.map((country) => 
+            <Country name={country.name.common} 
+            capital={country.capital} 
+            area={country.area}
+            languages={country.languages && showLanguages(country.languages)}
+            flag={country.flags.png}
+            key={country.flag}/>
+        ))}
+
+        {selectedCountry && ( 
+            <div>
+              <p>{selectedCountry.name.common}</p>
+              <p>Capital: {selectedCountry.capital}</p>
+              <p>Area: {selectedCountry.area}</p>
+              <p>Language(s): 
+                {selectedCountry.languages && showLanguages(selectedCountry.languages)}
+              </p>
+              <h3>Flag: </h3>
+              <img src={selectedCountry.flags.png} alt={selectedCountry.name.common} />
+              <h4>Weather in {selectedCountry.capital}</h4>
+              <p>{getTemp(`${selectedCountry.latlng[1], selectedCountry.latlng[0]}`)}</p>
+            </div>
+        )}
+      </div>
+    </div>
+  )
+
+}
+
+export default App
