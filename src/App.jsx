@@ -1695,7 +1695,7 @@ const App = () => {
     weatherService
     .getWeatherInfo(latitude, longitude)
     .then(response => {
-    console.log(response, 'new weather data from hamza')
+    console.log(response, 'new weather data')
     return response
   })
   }
@@ -1740,7 +1740,7 @@ const App = () => {
               <h3>Flag: </h3>
               <img src={selectedCountry.flags.png} alt={selectedCountry.name.common} />
               <h4>Weather in {selectedCountry.capital}</h4>
-              <p>{getTemp(`${selectedCountry.latlng[1], selectedCountry.latlng[0]}`)}</p>
+              <p>{getTemp(`${selectedCountry.latlng[0], selectedCountry.latlng[1]}`)}</p>
             </div>
         )}
       </div>
