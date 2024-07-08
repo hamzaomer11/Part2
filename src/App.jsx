@@ -1652,7 +1652,7 @@ const App = () => {
   const [countries, setCountries] = useState([]);
   const [filterCountry, setFilterCountry] = useState('')
   const [selectedCountry, setSelectedCountry] = useState(null)
-  const [getWeather, setWeather] = useState([])
+  const [getWeather, setWeather] = useState(null)
 
   useEffect(() => {
     console.log('effect')
@@ -1686,31 +1686,26 @@ const App = () => {
       return 'Unknown'
     }
   }
-
-  const handleCountryData = (country) => {
-    setSelectedCountry(country)
-  }
-
-  const getTemp = (latitude, longitude) => {
-    weatherService
-    .getWeatherInfo(latitude, longitude)
-    .then(response => {
-    console.log(response, 'new weather data')
-    setWeather(response)
-    })
-  }
   
-  useEffect(() => {
-    console.log('weather effects')
-    if(selectedCountry) {
-      weatherService
-      .getWeatherInfo(selectedCountry.latlng[0], selectedCountry.latlng[1])
-      .then(response => {
-      console.log(response, 'new weather data')
-      setWeather(response)
-    })
-    }
-  }, [selectedCountry])
+const baseUrl = 'https://api.openweathermap.org'
+const api_key = import.meta.env.VITE_WEATHER_API_KEY
+
+const getWeatherInfo = async (capital) => { 
+        try {
+          const response = await axios.get(`${baseUrl}/data/2.5/weather?q=${capital}&appid=${api_key}`)
+          console.log(`success - weather info for ${capital} retrieved`)
+          setWeather(response.data)
+        } catch (error) {
+          console.log(error.message, 'error for getWeatherInfo')
+        }     
+}
+
+const handleCountryData = (country) => {
+  setSelectedCountry(country)
+  const capital = country.capital
+  getWeatherInfo(capital)
+}
+
 
   return (
     <div>
@@ -1732,14 +1727,19 @@ const App = () => {
         )}
 
         {countriesToShow.length === 1 && (
-          countriesToShow.map((country) => 
-            <Country name={country.name.common} 
-            capital={country.capital} 
-            area={country.area}
-            languages={country.languages && showLanguages(country.languages)}
-            flag={country.flags.png}
-            key={country.flag}/>
-        ))}
+          <div>
+            <p>{countriesToShow[0].name.common}</p>
+            <p>Capital: {countriesToShow[0].capital}</p>
+              <p>Area: {countriesToShow[0].area}</p>
+              <p>Language(s): 
+                {countriesToShow[0].languages && showLanguages(countriesToShow[0].languages)}
+              </p>
+              <h3>Flag: </h3>
+              <img src={countriesToShow[0].flags.png} alt={countriesToShow[0].name.common} />
+              {console.log(getWeather, '...123...')}
+              <h4>Weather in {countriesToShow[0].capital}</h4>
+          </div>
+        )}
 
         {selectedCountry && ( 
             <div>
@@ -1751,10 +1751,16 @@ const App = () => {
               </p>
               <h3>Flag: </h3>
               <img src={selectedCountry.flags.png} alt={selectedCountry.name.common} />
-              <h4>Weather in {selectedCountry.capital}</h4>
-              {console.log(selectedCountry.latlng[0])}
-              {console.log(selectedCountry.latlng[1])}
-              <p>{getTemp(selectedCountry.latlng[0], selectedCountry.latlng[1])}</p>
+              {console.log(getWeather, '...456...')}
+              {getWeather && (
+                <div>
+                  {console.log(getWeather, 'the weather here...')}
+                  <h4>Weather in {selectedCountry.capital}</h4>
+                  <p>temprature {getWeather.main.temp}°C</p>
+                  <img src={`https://openweathermap.org/img/wn/${getWeather.weather[0].icon}@2x.png`} alt={getWeather.weather[0].description} />
+                  <p>wind {getWeather.wind.speed} m/s</p>
+                </div>
+              )}
             </div>
         )}
       </div>
