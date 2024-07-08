@@ -1696,9 +1696,21 @@ const App = () => {
     .getWeatherInfo(latitude, longitude)
     .then(response => {
     console.log(response, 'new weather data')
-    return response
-  })
+    setWeather(response)
+    })
   }
+  
+  useEffect(() => {
+    console.log('weather effects')
+    if(selectedCountry) {
+      weatherService
+      .getWeatherInfo(selectedCountry.latlng[0], selectedCountry.latlng[1])
+      .then(response => {
+      console.log(response, 'new weather data')
+      setWeather(response)
+    })
+    }
+  }, [selectedCountry])
 
   return (
     <div>
@@ -1740,7 +1752,9 @@ const App = () => {
               <h3>Flag: </h3>
               <img src={selectedCountry.flags.png} alt={selectedCountry.name.common} />
               <h4>Weather in {selectedCountry.capital}</h4>
-              <p>{getTemp(`${selectedCountry.latlng[0], selectedCountry.latlng[1]}`)}</p>
+              {console.log(selectedCountry.latlng[0])}
+              {console.log(selectedCountry.latlng[1])}
+              <p>{getTemp(selectedCountry.latlng[0], selectedCountry.latlng[1])}</p>
             </div>
         )}
       </div>
