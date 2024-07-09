@@ -1672,6 +1672,7 @@ const App = () => {
   const handleFilterChange = (event) => {
     console.log(event.target.value)
     setFilterCountry(event.target.value)
+    console.log(selectedCountry, 'search ')
   }
 
   const countriesToShow = countries.filter(country => country.name.common.toLowerCase().includes(filterCountry.toLowerCase())) 
@@ -1690,22 +1691,31 @@ const App = () => {
 const baseUrl = 'https://api.openweathermap.org'
 const api_key = import.meta.env.VITE_WEATHER_API_KEY
 
-const getWeatherInfo = async (capital) => { 
-        try {
-          const response = await axios.get(`${baseUrl}/data/2.5/weather?q=${capital}&appid=${api_key}`)
-          console.log(`success - weather info for ${capital} retrieved`)
-          setWeather(response.data)
-        } catch (error) {
-          console.log(error.message, 'error for getWeatherInfo')
-        }     
-}
+useEffect(() => {
+  console.log('weather effect')
+  const getWeatherInfo = async () => { 
+    try {
+      const response = await axios.get(`${baseUrl}/data/2.5/weather?q=${selectedCountry?.capital}&appid=${api_key}`)
+      console.log(`success: weather info for ${selectedCountry?.capital} retrieved`)
+      setWeather(response.data)
+    } catch (error) {
+      console.log(error.message, 'error for getWeatherInfo')
+    }     
+  }
+  if (selectedCountry?.capital) {
+    getWeatherInfo();
+  }
+}, [selectedCountry?.capital])
+
+useEffect(() => {
+  if(countriesToShow.length === 1) {
+    setSelectedCountry(countriesToShow[0])
+  }
+}, [countriesToShow[0]])
 
 const handleCountryData = (country) => {
   setSelectedCountry(country)
-  const capital = country.capital
-  getWeatherInfo(capital)
 }
-
 
   return (
     <div>
@@ -1723,21 +1733,6 @@ const handleCountryData = (country) => {
               <button onClick={() => handleCountryData(country)}>Show</button>
             </div>
             )}
-          </div>
-        )}
-
-        {countriesToShow.length === 1 && (
-          <div>
-            <p>{countriesToShow[0].name.common}</p>
-            <p>Capital: {countriesToShow[0].capital}</p>
-              <p>Area: {countriesToShow[0].area}</p>
-              <p>Language(s): 
-                {countriesToShow[0].languages && showLanguages(countriesToShow[0].languages)}
-              </p>
-              <h3>Flag: </h3>
-              <img src={countriesToShow[0].flags.png} alt={countriesToShow[0].name.common} />
-              {console.log(getWeather, '...123...')}
-              <h4>Weather in {countriesToShow[0].capital}</h4>
           </div>
         )}
 
