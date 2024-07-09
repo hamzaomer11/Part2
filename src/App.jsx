@@ -1634,8 +1634,6 @@ export default App
 
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import Country from './components/Country'
-import weatherService from './services/weather'
 
 const Filter = ({handleFilterChange}) => {
   return (
