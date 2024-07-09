@@ -1692,7 +1692,7 @@ const baseUrl = 'https://api.openweathermap.org'
 const api_key = import.meta.env.VITE_WEATHER_API_KEY
 
 useEffect(() => {
-  console.log('weather effect')
+  console.log('weather api effect')
   const getWeatherInfo = async () => { 
     try {
       const response = await axios.get(`${baseUrl}/data/2.5/weather?q=${selectedCountry?.capital}&appid=${api_key}`)
@@ -1708,8 +1708,11 @@ useEffect(() => {
 }, [selectedCountry?.capital])
 
 useEffect(() => {
+  console.log('weather for country effect')
+  console.log(selectedCountry, '1st rendered value')
   if(countriesToShow.length === 1) {
     setSelectedCountry(countriesToShow[0])
+    console.log(selectedCountry, '2nd rendered value')
   }
 }, [countriesToShow[0]])
 
@@ -1738,6 +1741,7 @@ const handleCountryData = (country) => {
 
         {selectedCountry && ( 
             <div>
+              {console.log(selectedCountry, 'da real deal')}
               <p>{selectedCountry.name.common}</p>
               <p>Capital: {selectedCountry.capital}</p>
               <p>Area: {selectedCountry.area}</p>
@@ -1746,7 +1750,6 @@ const handleCountryData = (country) => {
               </p>
               <h3>Flag: </h3>
               <img src={selectedCountry.flags.png} alt={selectedCountry.name.common} />
-              {console.log(getWeather, '...456...')}
               {getWeather && (
                 <div>
                   {console.log(getWeather, 'the weather here...')}
