@@ -1670,7 +1670,6 @@ const App = () => {
   const handleFilterChange = (event) => {
     console.log(event.target.value)
     setFilterCountry(event.target.value)
-    console.log(selectedCountry, 'search ')
   }
 
   const countriesToShow = countries.filter(country => country.name.common.toLowerCase().includes(filterCountry.toLowerCase())) 
@@ -1694,7 +1693,6 @@ useEffect(() => {
   const getWeatherInfo = async () => { 
     try {
       const response = await axios.get(`${baseUrl}/data/2.5/weather?q=${selectedCountry?.capital}&appid=${api_key}`)
-      console.log(`success: weather info for ${selectedCountry?.capital} retrieved`)
       setWeather(response.data)
     } catch (error) {
       console.log(error.message, 'error for getWeatherInfo')
@@ -1706,11 +1704,8 @@ useEffect(() => {
 }, [selectedCountry?.capital])
 
 useEffect(() => {
-  console.log('weather for country effect')
-  console.log(selectedCountry, '1st rendered value')
   if(countriesToShow.length === 1) {
     setSelectedCountry(countriesToShow[0])
-    console.log(selectedCountry, '2nd rendered value')
   }
 }, [countriesToShow[0]])
 
@@ -1750,7 +1745,6 @@ const handleCountryData = (country) => {
               <img src={selectedCountry.flags.png} alt={selectedCountry.name.common} />
               {getWeather && (
                 <div>
-                  {console.log(getWeather, 'the weather here...')}
                   <h4>Weather in {selectedCountry.capital}</h4>
                   <p>temprature {getWeather.main.temp}°C</p>
                   <img src={`https://openweathermap.org/img/wn/${getWeather.weather[0].icon}@2x.png`} alt={getWeather.weather[0].description} />
