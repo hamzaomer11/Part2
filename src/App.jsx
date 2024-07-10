@@ -1653,13 +1653,10 @@ const App = () => {
   const [getWeather, setWeather] = useState(null)
 
   useEffect(() => {
-    console.log('effect')
     axios
       .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
       .then(response => {
-        console.log('promise fulfilled')
         setCountries(response.data)
-        console.log(response.data, 'What to do here')
       })
       .catch(error => {
         console.log(error.message)
@@ -1668,7 +1665,6 @@ const App = () => {
   console.log('render', countries.length, 'countries')
 
   const handleFilterChange = (event) => {
-    console.log(event.target.value)
     setFilterCountry(event.target.value)
   }
 
@@ -1689,7 +1685,6 @@ const baseUrl = 'https://api.openweathermap.org'
 const api_key = import.meta.env.VITE_WEATHER_API_KEY
 
 useEffect(() => {
-  console.log('weather api effect')
   const getWeatherInfo = async () => { 
     try {
       const response = await axios.get(`${baseUrl}/data/2.5/weather?q=${selectedCountry?.capital}&appid=${api_key}`)
